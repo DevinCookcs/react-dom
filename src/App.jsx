@@ -1,28 +1,29 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, createContext } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Profile from "./pages/Profile";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import Navbar from "./Navbar";
 
-function ListItem(props) {
-  return <li>{props.animal}</li>;
-}
-
-function List(props) {
-  return (
-    <ul>
-      {props.animals.map((animal) => {
-        return <ListItem key={animal} animal={animal} />;
-      })}
-    </ul>
-  );
-}
+export const AppContext = createContext();
 
 function App() {
-  const animals = ["Lion", "Cow", "Snake", "Lizard"];
+  const [username, setUsername] = useState("Devin");
 
   return (
-    <div>
-      <h1>Animals: </h1>
-      <List animals={animals} />
+    <div className="App">
+      <AppContext.Provider value={{ username, setUsername }}>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<h1> Page not found </h1>} />
+          </Routes>
+        </Router>
+      </AppContext.Provider>
     </div>
   );
 }
