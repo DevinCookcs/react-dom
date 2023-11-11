@@ -6,7 +6,7 @@ export default function Profile() {
   const { username } = useContext(AppContext);
   return (
     <div>
-      Profile, user is: {username}
+      Profile page, User is: {username}
       <ChangeProfile />
     </div>
   );

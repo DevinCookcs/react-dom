@@ -3,5 +3,5 @@ import { AppContext } from "../App";
 
 export default function Home() {
   const { username } = useContext(AppContext);
-  return <h1> This is the home page of {username} </h1>;
+  return <h1> Home page of: {username} </h1>;
 }
