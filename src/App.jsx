@@ -1,34 +1,33 @@
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/Home";
-import { Profile } from "./pages/Profile";
-import { Contact } from "./pages/Contact";
-import Navbar from "./Navbar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-function App() {
-  const client = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: true,
-      },
-    },
-  });
+export default function App() {
+  const [advice, setAdvice] = useState("");
+  const [count, setCount] = useState(0);
+
+  async function getAdvice() {
+    const res = await fetch("https://api.adviceslip.com/advice");
+    const data = await res.json();
+    setAdvice(data.slip.advice);
+    setCount((c) => c + 1);
+  }
+
+  useEffect(() => {
+    getAdvice();
+  }, []);
+
   return (
-    <div className="App">
-      <QueryClientProvider client={client}>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<h1> PAGE NOT FOUND</h1>} />
-          </Routes>
-        </Router>
-      </QueryClientProvider>
+    <div>
+      <h1>{advice}</h1>
+      <button onClick={getAdvice}>Get Advice</button>
+      <Message count={count} />
     </div>
   );
 }
 
-export default App;
+function Message(props) {
+  return (
+    <p>
+      You have read <strong>{props.count}</strong> pieces of advice
+    </p>
+  );
+}
